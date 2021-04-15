@@ -40,8 +40,6 @@ def main():
 	#for char in characters:
 	#	download_files(char)
 
-	#pool = Pool(processes=len(process_list))
-	#pool.map(run_process, process_list)
 	# Optional multiprocessing.
 	pool = mp.Pool(processes=len(characters))
 	pool.map(download_files, tuple(characters))
