@@ -1,0 +1,1 @@
+See that scanner right there, right? It's deciding which turrets to keep and which to toss. And it's using that MASTER turret, there, as a template! If we pull out the template turret, it'll shut down the whole production line.
