@@ -8,6 +8,7 @@
 
 import os
 import requests
+import multiprocessing as mp
 from bs4 import BeautifulSoup as bsoup
 from tqdm import tqdm
 
@@ -36,8 +37,14 @@ def main():
 
 	# Iterate through that list of characters and download the voice
 	# lines and transcripts.
-	for char in characters:
-		download_files(char)
+	#for char in characters:
+	#	download_files(char)
+
+	#pool = Pool(processes=len(process_list))
+	#pool.map(run_process, process_list)
+	# Optional multiprocessing.
+	pool = mp.Pool(processes=len(characters))
+	pool.map(download_files, tuple(characters))
 
 	# Exit the program.
 	exit(0)
