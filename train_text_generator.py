@@ -41,11 +41,13 @@ def main():
 	# max length of the longest line in the character's lines.
 	max_length = 0
 	for line in compiled_text.split("\n"):
-		max_length = max(len(line), max_length)
+		max_length = max(len(line.split()), max_length)
 
 	# Initialize a text generator and train it.
 	gen_settings = ht.GENSettings()
 	gen_settings.max_length = max_length
+	gen_settings.early_stopping = True
+	gen_settings.no_repeat_ngram_size = 2
 	text_gen = ht.HappyGeneration()
 	text_gen.train(character + "_compiled_lines.txt")
 
@@ -60,41 +62,9 @@ def main():
 	print("Prompt: " + prompt2)
 	print("Output: " + response2)
 
-	'''
-	tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-	model = TFGPT2Model.from_pretrained("gpt2")
-
-	# Note that one of the lines contains a special character that
-	# utf-8 cant map. It does work with cp1252 Windows codepage
-	# encoding.
-	with open(text_files[0], "r", encoding="cp1252") as f:
-		first_line = f.read()
-	print(first_line)
-	#exit(0)
-
-	inputs = tokenizer(first_line, return_tensors="tf")
-	outputs = model(inputs)
-	last_hidden_state = outputs[0] # The last hidden state is the first
-	# element of the output tuple.
-	print(inputs)
-	print("-"*72)
-	print(outputs)
-	print(tokenizer.decode(outputs.last_hidden_state))
-	'''
-
-	"""
-	# Initialize tokenizer.
-	tokenizer = ByteLevelBPETokenizer()
-
-	# Customize tokenizer training.
-	tokenizer.train(
-		files=text_files, vocab_size=52000, min_frequency=2, 
-		#special_tokens=[]
-	)
-
-	# Save tokenizer.
-	tokenizer.save_model(character)
-	"""
+	# Save the model.
+	model_save = character + "_AI"
+	text_gen.save(model_save)
 
 	# Exit the program.
 	exit(0)
