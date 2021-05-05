@@ -92,9 +92,22 @@ def download_files(character):
 		# Save the text lines to a file.
 		#print(line_items[i].text.strip("\n")[1:-1])
 		processed_text = line_items[i].text.strip("\n")[1:-1]
+		if processed_text.count("\"") == 2:
+			processed_text = processed_text.split("\"")[1]
 		text_filename = audio_filename[:-4] + ".txt"
 		with open(folder_path + text_filename, "w+") as txt:
 			txt.write(processed_text)
+
+	# Manually clean the remaining texts. They will be listed here.
+	text_files = [folder_path + text for text in os.listdir(folder_path) 
+				if text.endswith(".txt")]
+	for text in text_files:
+		with open(text, "r", encoding="cp1252") as f:
+			file_lines = f.read()
+		if file_lines.count("\"") != 0:
+			print(text)
+			print(file_lines)
+			print("-"*72)
 
 	# Return the function.
 	return

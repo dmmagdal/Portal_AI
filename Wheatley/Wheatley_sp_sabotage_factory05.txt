@@ -1,1 +1,1 @@
-See that scanner right there? It's deciding which turrets to keep and which to toss. And it's using that MASTER turret as a template! If we pull out the template turret, it'll shut down the whole production line." An extra "right?" and "there" were added after the scanner and the master turret, respectively, to give time to point each out
+See that scanner right there? It's deciding which turrets to keep and which to toss. And it's using that MASTER turret as a template! If we pull out the template turret, it'll shut down the whole production line.
