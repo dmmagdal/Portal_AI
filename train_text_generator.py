@@ -48,23 +48,58 @@ def main():
 	gen_settings.max_length = max_length
 	gen_settings.early_stopping = True
 	gen_settings.no_repeat_ngram_size = 2
+
+	# Huggingface GPT-2 Text generator.
 	text_gen = ht.HappyGeneration()
 	text_gen.train(character + "_compiled_lines.txt")
 
+	# Huggingface GPT-Neo text generators.
+	neo_gen1_3b = ht.HappyGeneration(model_type="GPT-NEO", model_name="EleutherAI/gpt-neo-1.3B")
+	neo_gen1_3b.train(character + "_compiled_lines.txt")
+	neo_gen2_7b = ht.HappyGeneration(model_type="GPT-NEO", model_name="EleutherAI/gpt-neo-2.7B")
+	neo_gen2_7b.train(character + "_compiled_lines.txt")
+
 	# Test a few text generations.
 	prompt1 = "Oh, it's you. It's been a long time"
+	prompt2 = "You know, here in Aperture Science"
+
+	# Text generations with GPT-2.
 	response1 = text_gen.generate_text(prompt1, args=gen_settings).text
+	print("GPT-2 Text Responses:")
 	print("Prompt: " + prompt1)
 	print("Output: " + response1)
 
-	prompt2 = "You know, here in Aperture Science"
 	response2 = text_gen.generate_text(prompt2, args=gen_settings).text
 	print("Prompt: " + prompt2)
 	print("Output: " + response2)
 
+	# Text generations with GPT-Neo 1.3B.
+	response1_neo_13 = neo_gen1_3b.generate_text(prompt1, args=gen_settings).text
+	print("GPT-2 Text Responses:")
+	print("Prompt: " + prompt1)
+	print("Output: " + response1_neo_13)
+
+	response2_neo_13 = neo_gen1_3b.generate_text(prompt2, args=gen_settings).text
+	print("Prompt: " + prompt2)
+	print("Output: " + response2_neo_13)
+
+	# Text generations with GPT-Neo 2.7B.
+	response1_neo_27 = neo_gen2_7b.generate_text(prompt1, args=gen_settings).text
+	print("GPT-2 Text Responses:")
+	print("Prompt: " + prompt1)
+	print("Output: " + response1_neo_27)
+
+	response2_neo_27 = neo_gen2_7b.generate_text(prompt2, args=gen_settings).text
+	print("Prompt: " + prompt2)
+	print("Output: " + response2_neo_27)
+
 	# Save the model.
-	model_save = character + "_AI"
-	text_gen.save(model_save)
+	model_save_gpt2 = character + "_AI_GPT-2"
+	text_gen.save(model_save_gpt2)
+	model_save_gpt_neo_13 = character + "_AI_GPT-Neo_1B"
+	neo_gen1_3b.save(model_save_gpt_neo_13)
+	model_save_gpt_neo_27 = character + "_AI_GPT-Neo_2B"
+	neo_gen2_7b.save(model_save_gpt_neo_27)
 
 	# Exit the program.
 	exit(0)
