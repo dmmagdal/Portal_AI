@@ -8,6 +8,7 @@
 # Windows/MacOS/Linux
 
 
+import gc
 import os
 import happytransformer as ht
 '''
@@ -51,18 +52,38 @@ def main():
 
 	# Huggingface GPT-2 Text generator.
 	text_gen = ht.HappyGeneration()
-	text_gen.train(character + "_compiled_lines.txt")
+	#text_gen.train(character + "_compiled_lines.txt")
 
+	'''
 	# Huggingface GPT-Neo text generators.
 	neo_gen1_3b = ht.HappyGeneration(model_type="GPT-NEO", model_name="EleutherAI/gpt-neo-1.3B")
 	neo_gen1_3b.train(character + "_compiled_lines.txt")
 	neo_gen2_7b = ht.HappyGeneration(model_type="GPT-NEO", model_name="EleutherAI/gpt-neo-2.7B")
 	neo_gen2_7b.train(character + "_compiled_lines.txt")
+	'''
+
+	# Huggingface GPT-2 variation (distilgpt2, gpt2-medium, gpt2-large,
+	# gpt2-xl, openai-gpt, EleutherAI/gpt-neo-125M, xlnet-base-cased,
+	# xlnet-large-cased).
+	# Could not download the following models:
+	# 1) EleutherAI/gpt-neo-2.7B
+	# Could not train the following models:
+	# 1) gpt2-medium
+	# 2) gpt2-large
+	# 3) gpt2-xl
+	# 4) EleutherAI/gpt-new-1.3B
+	# 5) EleutherAI/gpt-new-2.7B
+	# 6) xlnet-based-cased
+	# 7) xlnet-large-cased
+	models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"], 
+				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B", "EleutherAI/gpt-neo-2.7B"],
+				"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
 
 	# Test a few text generations.
 	prompt1 = "Oh, it's you. It's been a long time"
 	prompt2 = "You know, here in Aperture Science"
 
+	'''
 	# Text generations with GPT-2.
 	response1 = text_gen.generate_text(prompt1, args=gen_settings).text
 	print("GPT-2 Text Responses:")
@@ -72,7 +93,25 @@ def main():
 	response2 = text_gen.generate_text(prompt2, args=gen_settings).text
 	print("Prompt: " + prompt2)
 	print("Output: " + response2)
+	'''
 
+	# Test training models.
+	for m in models:
+		for n in models[m]:
+			model = ht.HappyGeneration(model_type=m, model_name=n)
+			print("Training {}/{}:".format(m, n))
+			model.train(character + "_compiled_lines.txt")
+			print("{}/{} Text Responses:".format(m, n))
+			response1 = model.generate_text(prompt1, args=gen_settings).text
+			print("Prompt: " + prompt1)
+			print("Output: " + response1)
+
+			response2 = model.generate_text(prompt2, args=gen_settings).text
+			print("Prompt: " + prompt2)
+			print("Output: " + response2)
+			gc.collect()
+
+	'''
 	# Text generations with GPT-Neo 1.3B.
 	response1_neo_13 = neo_gen1_3b.generate_text(prompt1, args=gen_settings).text
 	print("GPT-2 Text Responses:")
@@ -92,14 +131,17 @@ def main():
 	response2_neo_27 = neo_gen2_7b.generate_text(prompt2, args=gen_settings).text
 	print("Prompt: " + prompt2)
 	print("Output: " + response2_neo_27)
+	'''
 
 	# Save the model.
 	model_save_gpt2 = character + "_AI_GPT-2"
 	text_gen.save(model_save_gpt2)
+	'''
 	model_save_gpt_neo_13 = character + "_AI_GPT-Neo_1B"
 	neo_gen1_3b.save(model_save_gpt_neo_13)
 	model_save_gpt_neo_27 = character + "_AI_GPT-Neo_2B"
 	neo_gen2_7b.save(model_save_gpt_neo_27)
+	'''
 
 	# Exit the program.
 	exit(0)
