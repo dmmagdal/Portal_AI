@@ -71,13 +71,12 @@ def main():
 	# Note that for training the GPT-Neo 1.3B model on the Dell
 	# Desktop, it is best to run the training when it is the only
 	# active program on the machine.
-	#models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"], 
+	#models = {"gpt-2": ["openai-gpt", "gpt2", "distilgpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"], 
 	#			"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B", "EleutherAI/gpt-neo-2.7B"],
 	#			"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
-	models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large"], 
+	models = {"gpt-2": ["openai-gpt", "gpt2", "distilgpt2", "gpt2-medium", "gpt2-large"], 
 				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B"],
 				"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
-	
 
 	# Test training models.
 	for m in models:
