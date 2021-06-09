@@ -20,6 +20,7 @@ from transformers import GPT2Tokenizer, TFGPT2Model
 
 
 def main():
+	# Load the characters.
 	characters = ["GLaDOS", "Wheatley"]
 	character = characters[0]
 
@@ -50,9 +51,62 @@ def main():
 	gen_settings.early_stopping = True
 	gen_settings.no_repeat_ngram_size = 2
 
+	# Prmpts to test a few text generations.
+	prompt1 = "Oh, it's you. It's been a long time"
+	prompt2 = "You know, here in Aperture Science"
+
+	# Huggingface GPT-2 variation (distilgpt2, gpt2-medium, gpt2-large,
+	# gpt2-xl, openai-gpt, EleutherAI/gpt-neo-125M, xlnet-base-cased,
+	# xlnet-large-cased).
+	# Could not download the following models:
+	# 1) EleutherAI/gpt-neo-2.7B
+	# Could not train the following models:
+	# 1) gpt2-medium (Lenovo Laptop)
+	# 2) gpt2-large (Lenovo Laptop)
+	# 3) gpt2-xl (Lenovo Laptop, Dell Desktop)
+	# 4) EleutherAI/gpt-neo-1.3B (Lenovo Laptop)
+	# 5) EleutherAI/gpt-neo-2.7B (Lenovo Laptop, Dell Desktop)
+	# 6) xlnet-based-cased (Lenovo Laptop, Dell Desktop)
+	# 7) xlnet-large-cased (Lenovo Laptop, Dell Desktop)
+	# Note that for training the GPT-Neo 1.3B model on the Dell
+	# Desktop, it is best to run the training when it is the only
+	# active program on the machine.
+	#models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"], 
+	#			"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B", "EleutherAI/gpt-neo-2.7B"],
+	#			"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
+	models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large"], 
+				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B"],
+				"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
+	
+
+	# Test training models.
+	for m in models:
+		for n in models[m]:
+			# Instiate model and train it.
+			model = ht.HappyGeneration(model_type=m, model_name=n)
+			print("Training {}/{}:".format(m, n))
+			model.train(character + "_compiled_lines.txt")
+
+			# Print the model's responses to the given prompts.
+			print("{}/{} Text Responses:".format(m, n))
+			response1 = model.generate_text(prompt1, args=gen_settings).text
+			print("Prompt: " + prompt1)
+			print("Output: " + response1)
+
+			response2 = model.generate_text(prompt2, args=gen_settings).text
+			print("Prompt: " + prompt2)
+			print("Output: " + response2)
+
+			# Save the model.
+			model_save = "_AI_" + n.replace("/", "_")
+			model.save(model_save)
+
+			# Do some garbage collection on memory.
+			gc.collect()
+
 	# Huggingface GPT-2 Text generator.
 	text_gen = ht.HappyGeneration()
-	#text_gen.train(character + "_compiled_lines.txt")
+	text_gen.train(character + "_compiled_lines.txt")
 
 	'''
 	# Huggingface GPT-Neo text generators.
@@ -61,27 +115,6 @@ def main():
 	neo_gen2_7b = ht.HappyGeneration(model_type="GPT-NEO", model_name="EleutherAI/gpt-neo-2.7B")
 	neo_gen2_7b.train(character + "_compiled_lines.txt")
 	'''
-
-	# Huggingface GPT-2 variation (distilgpt2, gpt2-medium, gpt2-large,
-	# gpt2-xl, openai-gpt, EleutherAI/gpt-neo-125M, xlnet-base-cased,
-	# xlnet-large-cased).
-	# Could not download the following models:
-	# 1) EleutherAI/gpt-neo-2.7B
-	# Could not train the following models:
-	# 1) gpt2-medium
-	# 2) gpt2-large
-	# 3) gpt2-xl
-	# 4) EleutherAI/gpt-new-1.3B
-	# 5) EleutherAI/gpt-new-2.7B
-	# 6) xlnet-based-cased
-	# 7) xlnet-large-cased
-	models = {"gpt-2": ["openai-gpt", "gpt-2", "distilgpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"], 
-				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B", "EleutherAI/gpt-neo-2.7B"],
-				"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
-
-	# Test a few text generations.
-	prompt1 = "Oh, it's you. It's been a long time"
-	prompt2 = "You know, here in Aperture Science"
 
 	'''
 	# Text generations with GPT-2.
@@ -94,22 +127,6 @@ def main():
 	print("Prompt: " + prompt2)
 	print("Output: " + response2)
 	'''
-
-	# Test training models.
-	for m in models:
-		for n in models[m]:
-			model = ht.HappyGeneration(model_type=m, model_name=n)
-			print("Training {}/{}:".format(m, n))
-			model.train(character + "_compiled_lines.txt")
-			print("{}/{} Text Responses:".format(m, n))
-			response1 = model.generate_text(prompt1, args=gen_settings).text
-			print("Prompt: " + prompt1)
-			print("Output: " + response1)
-
-			response2 = model.generate_text(prompt2, args=gen_settings).text
-			print("Prompt: " + prompt2)
-			print("Output: " + response2)
-			gc.collect()
 
 	'''
 	# Text generations with GPT-Neo 1.3B.
