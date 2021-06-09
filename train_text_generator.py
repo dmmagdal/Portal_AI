@@ -97,7 +97,7 @@ def main():
 			print("Output: " + response2)
 
 			# Save the model.
-			model_save = "_AI_" + n.replace("/", "_")
+			model_save = character + "_AI_" + n.replace("/", "_")
 			model.save(model_save)
 
 			# Do some garbage collection on memory.
