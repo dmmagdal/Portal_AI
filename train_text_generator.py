@@ -75,8 +75,7 @@ def main():
 	#			"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B", "EleutherAI/gpt-neo-2.7B"],
 	#			"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
 	models = {"gpt-2": ["openai-gpt", "gpt2", "distilgpt2", "gpt2-medium", "gpt2-large"], 
-				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B"],
-				"xlnet": ["xlnet-base-cased", "xlnet-large-cased"]}
+				"gpt-neo": ["EleutherAI/gpt-neo-125M", "EleutherAI/gpt-neo-1.3B"]}
 
 	# Test training models.
 	for m in models:
