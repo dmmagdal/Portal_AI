@@ -31,6 +31,9 @@ pip install -r requirements.txt
 Deep Convolutional Text-to-Speech Repository
 - https://github.com/Kyubyong/dc_tts
 
+Tensorflow 2.4 Implementation of DC-TTS Repository
+- https://github.com/dmmagdal/dc_tts
+
 LJ Speech Dataset
 - https://keithito.com/LJ-Speech-Dataset/
 

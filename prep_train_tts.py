@@ -10,6 +10,7 @@
 import os
 import subprocess
 from shutil import copyfile
+import gdown
 
 
 def main():
@@ -77,13 +78,43 @@ def main():
 	with open(filelist_save, "w+") as filelist:
 		filelist.write(filelist_text)
 
+	# Copy over the custom_hparams.py script to the tacotron
+	# repository. This will replace the HParams module from
+	# tensorflow.contrib.training.HParams. Tensorflow.contrib was not
+	# brought over to Tensorflow 2.0 from 1.8.
+	copyfile("custom_hparams.py", "./tacotron2/hparams.py")
+
+	# Notes before running train.py
+	# 1) Must be in the tacotron repository to run train.py. Cannot run
+	# script from any other directory as this will mess up the paths to
+	# folders it uses to train.
+	# 2) Must alter hparams.py to use HParams class from
+	# custom_hparams.py instead of tensorflow.contrib.
+	# 3) Must remove the .cuda() from the line 
+	# model = Tacotron2(hparams).cuda() in train.py. Have had issues
+	# with this even on Dell Desktop which does have Cuda installed.
+	# 4) Must remove the .cuda from the line 
+	# ids = torch.arange(0, max_len, out=torch.cuda.LongTensor(max_len))
+	# in utils.py. Have had more isues with this line. Just change the
+	# line to ids = torch.arange(0, max_len, out=torch.LongTensor(max_len))
+	# to get it to work.
+
+	# Change directory to the tacotron2 repository.
+	os.chdir("./tacotron2")
+
+	# Download pretrained tacotron model (trained on LJ-Speech dataset).
+	pretrained_tacotron_url = "https://drive.google.com/file/d/1c5ZTuT7J08wLUoVZ2KkUs_VdZuJ86ZqA/view?usp=sharing"
+	output = "tacotron2_statedict.pt"
+	gdown.download(pretrained_tacotron_url, output, quiet=False)
+
 	# Run training script train.py in tacotron2 repository to train
 	# model.
 	output_dir = character + "_saved_checkpoints"
 	log_dir = character + "_logs"
-	n_gpus = 0
-	n
-	train = subprocess.Popen("python ./tacotron2/train.py -o")
+	cmd = "python ./tacotron2/train.py -o " + output_dir + " -l " + log_dir +\
+		" -c " + output + " --warm_start"
+	#train = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	#cmd_output, cmd_error = train.communicate()
 
 	# Exit the program.
 	exit(0)

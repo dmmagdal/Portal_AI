@@ -5,7 +5,8 @@
 # official Tensorflow 2.0.
 # Source: http://tensorflow.biotecan.com/python/Python_1.8/tensorflow.
 # google.cn/api_docs/python/tf/contrib/training/HParams.html
-# 
+# https://github.com/tensorflow/tensorflow/blob/r1.8/tensorflow/
+# contrib/training/python/training/hparam.py
 # Tensorflow 2.4
 # Python 3.7
 # Windows/MacOS/Linux
